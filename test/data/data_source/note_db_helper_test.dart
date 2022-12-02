@@ -21,6 +21,11 @@ void main() {
 
     expect((await noteDbHelper.getNotes()).length, 1);
 
+
+    Note note = (await noteDbHelper.getNoteById(1))!;
+    expect(note.id, 1);
+
+
     await db.close();
   });
 }
