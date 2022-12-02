@@ -30,6 +30,9 @@ void main() {
     note = (await noteDbHelper.getNoteById(1))!;
     expect(note.title, 'change');
 
+    await noteDbHelper.deleteNote(note);
+    expect((await noteDbHelper.getNotes()).length, 0);
+
     await db.close();
   });
 }
