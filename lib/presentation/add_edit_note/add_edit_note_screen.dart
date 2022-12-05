@@ -39,7 +39,12 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
     Future.microtask(() {
       final viewModel = context.read<AddEditNoteViewModel>();
       _streamSubscription = viewModel.eventStream.listen((event) {
-        event.when(saveNote: () {
+        event.when(
+            showSnackBar: (String message) {
+              final snackBar = SnackBar(content: Text(message));
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },
+            saveNote: () {
           Navigator.pop(context, true);
         });
       });
@@ -109,19 +114,13 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if (_titleController.text.isEmpty ||
-              _contentController.text.isEmpty) {
-            const snackBar = SnackBar(content: Text('제목이나 내용이 비어 있습니다'));
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          } else {
-            viewModel.onEvent(
-              AddEditNoteEvent.saveNote(
-                widget.note == null ? null : widget.note!.id,
-                _titleController.text,
-                _contentController.text,
-              ),
-            );
-          }
+          viewModel.onEvent(
+            AddEditNoteEvent.saveNote(
+              widget.note == null ? null : widget.note!.id,
+              _titleController.text,
+              _contentController.text,
+            ),
+          );
         },
         child: const Icon(Icons.save),
       ),
