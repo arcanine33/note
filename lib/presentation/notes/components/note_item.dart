@@ -41,7 +41,7 @@ class NoteItem extends StatelessWidget {
             right: 8,
             child: IconButton(
               icon: const Icon(Icons.delete),
-              onPressed: onDeleteTap?.call(),
+              onPressed: () {onDeleteTap?.call();},
             ),
           )
         ],
