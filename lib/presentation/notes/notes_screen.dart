@@ -21,18 +21,25 @@ class NotesScreen extends StatelessWidget {
         titleTextStyle: const TextStyle(fontSize: 30),
         centerTitle: false,
         actions: [
-          IconButton(onPressed: (){}, icon: const Icon(Icons.sort))
+          IconButton(onPressed: (){
+            viewModel.onEvent(const NotesEvent.toggleOrderSection());
+          }, icon: const Icon(Icons.sort))
         ],
         elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(children: [
-          OrderSection(
-            noteOrder: state.noteOrder,
-            onOrderChanged: (NoteOrder noteOrder) {
-              viewModel.onEvent(NotesEvent.changeOrder(noteOrder));
-            },
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: state.isOrderSectionVisible
+                ? OrderSection(
+                    noteOrder: state.noteOrder,
+                    onOrderChanged: (NoteOrder noteOrder) {
+                      viewModel.onEvent(NotesEvent.changeOrder(noteOrder));
+                    },
+                  )
+                : Container(),
           ),
           ...state.notes
               .map(
@@ -46,7 +53,7 @@ class NotesScreen extends StatelessWidget {
                     );
 
                     if (isSaved != null && isSaved) {
-                      viewModel.onEvent(NotesEvent.loadNotes());
+                      viewModel.onEvent(const NotesEvent.loadNotes());
                     }
                   },
                   child: NoteItem(
@@ -73,10 +80,10 @@ class NotesScreen extends StatelessWidget {
         onPressed: () async {
           bool? isSaved = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddEditNoteScreen()),
+            MaterialPageRoute(builder: (context) => const AddEditNoteScreen()),
           );
           if (isSaved != null && isSaved) {
-            viewModel.onEvent(NotesEvent.loadNotes());
+            viewModel.onEvent(const NotesEvent.loadNotes());
           }
 
         },
