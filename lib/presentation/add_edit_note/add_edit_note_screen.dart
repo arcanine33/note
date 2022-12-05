@@ -40,13 +40,14 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
       final viewModel = context.read<AddEditNoteViewModel>();
       _streamSubscription = viewModel.eventStream.listen((event) {
         event.when(
-            showSnackBar: (String message) {
-              final snackBar = SnackBar(content: Text(message));
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            },
-            saveNote: () {
-          Navigator.pop(context, true);
-        });
+          showSnackBar: (String message) {
+            final snackBar = SnackBar(content: Text(message));
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          },
+          saveNote: () {
+            Navigator.pop(context, true);
+          },
+        );
       });
     });
   }
@@ -69,7 +70,7 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
         padding:
             const EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 48),
         color: Color(viewModel.color),
-        child: Column(
+        child: ListView(
           children: [
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
